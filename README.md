@@ -9,4 +9,4 @@ Python
 JavaScript
 HTML
 SQLite
-
+> [cite_start]**Why Offline First?** By combining `pywebview` with a local SQLite database, the application completely bypasses expensive cloud server maintenance costs, making board exam preparation instantly accessible anywhere[cite: 44, 186].
