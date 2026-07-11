@@ -84,7 +84,7 @@
             gap: 6px;
         }
 
-        /* Question Frame Setup */
+        
         .question-box {
             margin-bottom: 28px;
         }
@@ -105,7 +105,7 @@
             color: var(--text-primary);
         }
 
-        /* Interactive Options Grid matching layout context */
+        
         .options-list {
             display: flex;
             flex-direction: column;
@@ -161,8 +161,7 @@
             font-weight: 500;
         }
 
-        /* Layout Navigation Footer Systems */
-        .quiz-footer {
+        /* Layout Navigation Footer Systems */ .quiz-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -246,7 +245,7 @@
             </div>
         </div>
 
-        <!-- Footer Control Bar -->
+        
         <div class="quiz-footer">
             <button class="nav-btn" id="prevBtn" onclick="handleNavigation('prev')" disabled>
                 <svg style="width:18px; height:18px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
@@ -265,18 +264,17 @@
     </div>
 
     <script>
-        // Option selection tracking handle
+     
         function selectOption(element, choice) {
-            // Remove selection class from all sibling options
+           
             const options = document.querySelectorAll('.option-item');
             options.forEach(opt => opt.classList.remove('selected'));
             
-            // Apply selected styling structure to current item
+          
             element.classList.add('selected');
             console.log("Selected Answer Option Target: " + choice);
         }
 
-        // Navigation state handler prototype stub
         function handleNavigation(direction) {
             alert("Navigation triggered toward direction: " + direction + ". Hook this up to your Python data fetch pipeline next!");
         }

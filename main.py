@@ -22,37 +22,39 @@ class ExamEngineAPI:
         finally:
             conn.close()
     
-    def fetch_quiz_questions(self, subject):
+    def fetch_quiz_questions(self, subject, board, class_name):
         """
-        Fetches relevant rows cleanly from the matching mcq_bank table
-        and transforms them into the payload schema expected by the frontend.
+        Fetches 20 unique, randomized questions targeting all three specific 
+        filter vectors directly from the database layer.
         """
         try:
             conn = sqlite3.connect(self.db_name)
             cursor = conn.cursor()
             
-            # Target the correct table (mcq_bank) and correct column name (question_text)
-            query = "SELECT id, question_text, option_a, option_b, option_c, option_d, correct_option FROM mcq_bank WHERE subject = ?"
+            # CRITICAL PATCH: Added ORDER BY RANDOM() to query different questions every time
+            query = """
+                SELECT id, question_text, option_a, option_b, option_c, option_d, correct_option 
+                FROM mcq_bank 
+                WHERE subject = ? AND board = ? AND class_name = ?
+                ORDER BY RANDOM()
+                LIMIT 20
+            """
             
-            cursor.execute(query, [subject])
+            cursor.execute(query, [subject, board, class_name])
             rows = cursor.fetchall()
             conn.close()
             
-            # Map structural database rows to the clean array configuration your UI expects
             questions = []
             for row in rows:
                 questions.append({
                     "id": row[0],
-                    "question": row[1], # Maps 'question_text' field directly to JS 'question' key
+                    "question": row[1], 
                     "options": [row[2], row[3], row[4], row[5]],
                     "correct": row[6] 
                 })
             
-            # Randomize items to simulate an organic testing canvas environment
-            random.shuffle(questions)
-            selected_questions = questions[:10] # Cap engine feed limit to 10 items
-            
-            return json.dumps(selected_questions)
+            # Returns all 20 freshly scrambled questions across the bridge
+            return json.dumps(questions)
             
         except Exception as e:
             print(f"Error reading SQLite database: {e}")
@@ -63,7 +65,6 @@ class ExamEngineAPI:
         conn = sqlite3.connect(self.db_name)
         cursor = conn.cursor()
         try:
-            # Convert python list to string to store flatly inside SQLite field
             chapters_str = json.dumps(chapters)
             
             cursor.execute('''
@@ -80,8 +81,6 @@ class ExamEngineAPI:
 
 def run_app():
     api = ExamEngineAPI()
-    
-    # Target your template directly in the local folder block
     html_path = os.path.abspath('graphics.html')
     
     window = webview.create_window(
