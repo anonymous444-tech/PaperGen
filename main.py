@@ -2,6 +2,7 @@ import os
 import sqlite3
 import json
 import webview
+import random
 
 class ExamEngineAPI:
     def __init__(self):
@@ -20,6 +21,42 @@ class ExamEngineAPI:
             return {"error": str(e)}
         finally:
             conn.close()
+    
+    def fetch_quiz_questions(self, subject):
+        """
+        Fetches relevant rows cleanly from the matching mcq_bank table
+        and transforms them into the payload schema expected by the frontend.
+        """
+        try:
+            conn = sqlite3.connect(self.db_name)
+            cursor = conn.cursor()
+            
+            # Target the correct table (mcq_bank) and correct column name (question_text)
+            query = "SELECT id, question_text, option_a, option_b, option_c, option_d, correct_option FROM mcq_bank WHERE subject = ?"
+            
+            cursor.execute(query, [subject])
+            rows = cursor.fetchall()
+            conn.close()
+            
+            # Map structural database rows to the clean array configuration your UI expects
+            questions = []
+            for row in rows:
+                questions.append({
+                    "id": row[0],
+                    "question": row[1], # Maps 'question_text' field directly to JS 'question' key
+                    "options": [row[2], row[3], row[4], row[5]],
+                    "correct": row[6] 
+                })
+            
+            # Randomize items to simulate an organic testing canvas environment
+            random.shuffle(questions)
+            selected_questions = questions[:10] # Cap engine feed limit to 10 items
+            
+            return json.dumps(selected_questions)
+            
+        except Exception as e:
+            print(f"Error reading SQLite database: {e}")
+            return json.dumps([])
 
     def generate_and_save_paper(self, name, subject, board, class_name, chapters):
         """Trigger backend architecture generation logic and commit payload metadata into the engine db."""

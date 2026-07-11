@@ -341,6 +341,36 @@
         .chapter-card input {
             margin-top: 3px;
         }
+        /* Option Button Base */
+        .option-btn {
+            width: 100%;
+        padding: 14px 20px;
+        text-align: left;
+        background: var(--surface-color);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        color: var(--text-primary);
+    }
+        .option-btn:hover:not(:disabled) {
+        background: #f1f5f9;
+        border-color: #cbd5e1;
+    }
+
+        .option-btn.correct {
+        background: #d1fae5 !important;
+        border-color: var(--success) !important;
+        color: #065f46 !important;
+        font-weight: 600;
+    }
+
+        .option-btn.wrong {
+        background: #fee2e2 !important;
+        border-color: #ef4444 !important;
+        color: #991b1b !important;
+    }
     </style>
 </head>
 <body>
@@ -353,7 +383,6 @@
             </svg>
             <span>12:36 A.M.</span>
         </div>
-
         <table class="data-table">
             <thead>
                 <tr>
@@ -369,6 +398,32 @@
         
         <div id="emptyState" class="empty-state">No papers created yet. Click the '+' button to add one.</div>
     </div>
+    <div id="quizScreen" class="screen">
+    <div class="quiz-container" style="padding: 24px; max-width: 650px; margin: 0 auto;">
+        
+        <div class="quiz-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 id="quizTitle" style="font-size: 1.4rem; color: var(--text-primary);">Exam Session</h2>
+            <button onclick="navigateTo('dashboardScreen')" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.2rem;">✕ Exit</button>
+        </div>
+
+        <div class="progress-track" style="background: var(--border-color); border-radius: 8px; height: 8px; width: 100%; margin-bottom: 25px; overflow: hidden;">
+            <div id="quizProgressBar" style="background: var(--accent-blue); height: 100%; width: 0%; transition: width 0.3s ease;"></div>
+        </div>
+
+        <div class="question-container" style="margin-bottom: 24px;">
+            <p id="questionText" style="font-size: 1.25rem; font-weight: 500; line-height: 1.5; color: var(--text-primary);">Loading question...</p>
+        </div>
+
+        <div id="optionsGrid" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px;">
+            </div>
+
+        <div class="quiz-controls" style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 20px;">
+            <button id="prevBtn" onclick="prevQuestion()" style="padding: 10px 20px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--surface-color); color: var(--text-muted); cursor: pointer; font-weight: 500;" disabled>Previous</button>
+            <span id="questionCount" style="color: var(--text-muted); font-weight: 500; font-size: 0.95rem;">0 / 0</span>
+            <button id="nextBtn" onclick="nextQuestion()" style="padding: 10px 20px; border: none; border-radius: 6px; background: var(--accent-blue); color: white; cursor: pointer; font-weight: 500;" disabled>Next Question</button>
+        </div>
+    </div>
+</div>
 
 
     <div id="formScreen" class="screen">
@@ -539,7 +594,7 @@ function loadDashboardFromDB() {
         const tableBody = document.getElementById('papersTableBody');
         const emptyState = document.getElementById('emptyState');
         
-        tableBody.innerHTML = ""; // Empty dynamic DOM space
+        tableBody.innerHTML = ""; // Clear dynamic DOM space
 
         if(!response || response.length === 0 || response.error) {
             emptyState.style.display = 'block';
@@ -549,25 +604,34 @@ function loadDashboardFromDB() {
         emptyState.style.display = 'none';
         
         response.forEach(paper => {
-            const prefixCode = paper.subject.substring(0, 4).toUpperCase();
+            // Extract attributes safely from the database entry object
+            const paperName = paper.name || "Untitled Paper";
+            const paperBoard = paper.board || "N/A";
+            const paperClass = paper.class || paper.className || "N/A";
+            const paperSubject = paper.subject || "Subject";
+
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td>
                     <div class="file-cell">
                         <div class="file-icon">
-                            <span class="icon-text">${prefixCode.substring(0,2)}</span>
+                            <span class="icon-text" style="color: var(--accent-blue); font-size: 0.75rem;">
+                                ${paperSubject.substring(0, 3).toUpperCase()}
+                            </span>
                         </div>
                         <div>
-                            <div class="file-name">${paper.name}</div>
-                            <div class="file-subtitle">Board:${paper.board} • Class:${paper.class_name}</div>
+                            <div class="file-name">${paperName}</div>
+                            <div class="file-subtitle">Board: ${paperBoard} • Class: ${paperClass} • Subject: ${paperSubject}</div>
                         </div>
                     </div>
                 </td>
                 <td><span class="mode-text online">Local</span></td>
-                <td><span class="status-badge">${paper.status}</span></td>
+                <td><span class="status-badge">Pending</span></td>
                 <td class="actions-cell">
-                    <button class="action-btn" onclick="attemptPaper(${paper.id})" style="cursor:pointer;">
-                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
+                    <button class="action-btn" onclick="initializeQuiz('${paperSubject}','${paperName}')" style="cursor:pointer; opacity:1;">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                        </svg>
                     </button>
                 </td>
             `;
@@ -614,6 +678,132 @@ function attemptPaper(paperId) {
             activeSelectedChapters = [];
             document.getElementById('selectedChaptersCount').innerText = "";
         }
+// State Tracking Variables
+let quizQuestions = [];
+let currentQuestionIndex = 0;
+let userAnswers = {}; 
+
+function initializeQuiz(subject, paperName) {
+    document.getElementById('quizTitle').innerText = `${paperName}`;
+    document.getElementById('questionText').innerText = "Accessing localized engine questions...";
+    document.getElementById('optionsGrid').innerHTML = "";
+    
+    // Redirect view layout structure to the quiz screen
+    navigateTo('quizScreen');
+    
+    // Fire execution flow over the pywebview bridge using the clean single-parameter signature
+    if (window.pywebview && window.pywebview.api) {
+        window.pywebview.api.fetch_quiz_questions(subject)
+            .then(response => {
+                quizQuestions = JSON.parse(response);
+                currentQuestionIndex = 0;
+                userAnswers = {};
+                
+                if (quizQuestions.length === 0) {
+                    document.getElementById('questionText').innerText = "No questions found matching this subject profile.";
+                    document.getElementById('questionCount').innerText = "0 / 0";
+                    return;
+                }
+                displayQuestion();
+            })
+            .catch(err => {
+                console.error("Bridge Communication Failure:", err);
+                document.getElementById('questionText').innerText = "Critical error reading system storage.";
+            });
+    } else {
+        // Fallback testing wrapper context for running standalone browsers
+        quizQuestions = [
+            { id: 1, question: "What is the use of an SG bottle?", options: ["for gravity", "for RD", "for measurement", "for volume"], correct: "B" }
+        ];
+        displayQuestion();
+    }
+}
+
+function displayQuestion() {
+    if (quizQuestions.length === 0) return;
+    
+    const currentQuestion = quizQuestions[currentQuestionIndex];
+    document.getElementById('questionText').innerText = currentQuestion.question;
+    
+    // Update live progress tracking status elements
+    const progressPercent = ((currentQuestionIndex + 1) / quizQuestions.length) * 100;
+    document.getElementById('quizProgressBar').style.width = `${progressPercent}%`;
+    document.getElementById('questionCount').innerText = `${currentQuestionIndex + 1} / ${quizQuestions.length}`;
+    
+    // Rebuild option structure mapping configuration array variables
+    const optionsGrid = document.getElementById('optionsGrid');
+    optionsGrid.innerHTML = "";
+    
+    const optionLabels = ['A', 'B', 'C', 'D'];
+    
+    currentQuestion.options.forEach((optionText, idx) => {
+        const label = optionLabels[idx];
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.innerText = `${label}. ${optionText}`;
+        btn.dataset.label = label;
+        
+        btn.onclick = () => handleOptionSelection(label);
+        
+        // Restore locked interface engine state if the user navigates back/forth
+        if (userAnswers[currentQuestionIndex] !== undefined) {
+            btn.disabled = true;
+            if (label === currentQuestion.correct) {
+                btn.classList.add('correct');
+            } else if (label === userAnswers[currentQuestionIndex]) {
+                btn.classList.add('wrong');
+            }
+        }
+        
+        optionsGrid.appendChild(btn);
+    });
+    
+    // Update track button controls smoothly
+    document.getElementById('prevBtn').disabled = currentQuestionIndex === 0;
+    document.getElementById('nextBtn').disabled = userAnswers[currentQuestionIndex] === undefined;
+    document.getElementById('nextBtn').innerText = (currentQuestionIndex === quizQuestions.length - 1) ? "Finish" : "Next Question";
+}
+
+function handleOptionSelection(selectedLabel) {
+    // Block duplicate clicks / process evaluation checks once
+    if (userAnswers[currentQuestionIndex] !== undefined) return;
+    
+    const currentQuestion = quizQuestions[currentQuestionIndex];
+    userAnswers[currentQuestionIndex] = selectedLabel;
+    
+    const buttons = document.querySelectorAll('#optionsGrid .option-btn');
+    
+    // 4. Evaluate chosen value, execute UI freeze, highlight accurate navigation paths
+    buttons.forEach(btn => {
+        btn.disabled = true; // Immediately lock all selection paths
+        
+        if (btn.dataset.label === currentQuestion.correct) {
+            btn.classList.add('correct'); // Highlights target correct option pathway green
+        } else if (btn.dataset.label === selectedLabel) {
+            btn.classList.add('wrong'); // Marks inaccurate choices red
+        }
+    });
+    
+    // Activate navigation tracks to let users clean forward progress safely
+    document.getElementById('nextBtn').disabled = false;
+}
+
+function nextQuestion() {
+    if (currentQuestionIndex < quizQuestions.length - 1) {
+        currentQuestionIndex++;
+        displayQuestion();
+    } else {
+        alert("Quiz evaluation complete. Returning to the exam control console.");
+        navigateTo('dashboardScreen');
+    }
+}
+
+function prevQuestion() {
+    if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        displayQuestion();
+    }
+}        
     </script>
 </body>
 </html>
