@@ -62,7 +62,7 @@ def init_database():
     ''', seed_questions)
 
     conn.commit()
-    print(f"📦 Database ready! Embedded {cursor.rowcount} tailored sample questions mapped directly to your JS schema.")
+    print(f"Database ready! Embedded {cursor.rowcount} tailored sample questions mapped directly to your JS schema.")
     conn.close()
 
 if __name__ == '__main__':

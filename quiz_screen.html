@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Window - PaperGen</title>
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --surface-color: #ffffff;
+            --text-primary: #1e293b;
+            --text-muted: #64748b;
+            --success: #10b981;
+            --pending: #f59e0b;
+            --accent-blue: #3b82f6;
+            --btn-blue: #b9d5f3;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Screen Layout Architecture matching graphics.html */
+        .quiz-container {
+            width: 100%;
+            max-width: 900px;
+            background: var(--surface-color);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+            padding: 32px;
+            border: 1px solid var(--border-color);
+            min-height: 520px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Top Meta/Status Header */
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 24px;
+        }
+
+        .exam-info h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .exam-info p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .timer-badge {
+            background-color: #f1f5f9;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Question Frame Setup */
+        .question-box {
+            margin-bottom: 28px;
+        }
+
+        .question-number {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .question-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            line-height: 1.5;
+            color: var(--text-primary);
+        }
+
+        /* Interactive Options Grid matching layout context */
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-item:hover {
+            background-color: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        .option-item.selected {
+            background-color: #e0f2fe;
+            border-color: var(--accent-blue);
+        }
+
+        .option-prefix {
+            width: 28px;
+            height: 28px;
+            background-color: var(--surface-color);
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-right: 16px;
+            color: var(--text-muted);
+            transition: all 0.2s ease;
+        }
+
+        .option-item.selected .option-prefix {
+            background-color: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+        }
+
+        .option-text {
+            font-size: 1.05rem;
+            font-weight: 500;
+        }
+
+        /* Layout Navigation Footer Systems */
+        .quiz-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+            margin-top: auto;
+        }
+
+        .nav-btn {
+            background-color: var(--btn-blue);
+            color: #000;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: opacity 0.2s;
+        }
+
+        .nav-btn:hover {
+            opacity: 0.9;
+        }
+
+        .nav-btn:disabled {
+            background-color: #e2e8f0;
+            color: #94a3b8;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .submit-btn {
+            background-color: var(--success);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container">
+        <!-- Top Metadata Header -->
+        <div class="quiz-header">
+            <div class="exam-info">
+                <h2 id="paperTitle">Mock Exam Engine Frame</h2>
+                <p id="paperMeta">Subject: Physics • Chapters Selected: Core Curriculum</p>
+            </div>
+            <div class="timer-badge">
+                <svg style="width:18px; height:18px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span id="examTimer">02:30:00</span>
+            </div>
+        </div>
+
+        <!-- Question Body Context -->
+        <div class="question-box">
+            <div class="question-number" id="qNumberDisplay">Question 1</div>
+            <div class="question-text" id="qTextDisplay">What is the use of SG bottle?</div>
+        </div>
+
+        <!-- Options Container Grid -->
+        <div class="options-list" id="optionsContainer">
+            <div class="option-item" onclick="selectOption(this, 'A')">
+                <div class="option-prefix">A</div>
+                <div class="option-text">for gravity</div>
+            </div>
+            <div class="option-item" onclick="selectOption(this, 'B')">
+                <div class="option-prefix">B</div>
+                <div class="option-text">for RD</div>
+            </div>
+            <div class="option-item" onclick="selectOption(this, 'C')">
+                <div class="option-prefix">C</div>
+                <div class="option-text">for measurement</div>
+            </div>
+            <div class="option-item" onclick="selectOption(this, 'D')">
+                <div class="option-prefix">D</div>
+                <div class="option-text">for volume</div>
+            </div>
+        </div>
+
+        <!-- Footer Control Bar -->
+        <div class="quiz-footer">
+            <button class="nav-btn" id="prevBtn" onclick="handleNavigation('prev')" disabled>
+                <svg style="width:18px; height:18px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                </svg>
+                Prev.
+            </button>
+            
+            <button class="nav-btn" id="nextBtn" onclick="handleNavigation('next')">
+                Next
+                <svg style="width:18px; height:18px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Option selection tracking handle
+        function selectOption(element, choice) {
+            // Remove selection class from all sibling options
+            const options = document.querySelectorAll('.option-item');
+            options.forEach(opt => opt.classList.remove('selected'));
+            
+            // Apply selected styling structure to current item
+            element.classList.add('selected');
+            console.log("Selected Answer Option Target: " + choice);
+        }
+
+        // Navigation state handler prototype stub
+        function handleNavigation(direction) {
+            alert("Navigation triggered toward direction: " + direction + ". Hook this up to your Python data fetch pipeline next!");
+        }
+    </script>
+</body>
+</html>
