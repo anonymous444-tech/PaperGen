@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PaperGen</title>
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --surface-color: #ffffff;
+            --text-primary: #1e293b;
+            --text-muted: #64748b;
+            --success: #10b981;
+            --pending: #f59e0b;
+            --accent-blue: #3b82f6;
+            --btn-blue: #b9d5f3;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Screen Wrapper */
+        .screen {
+            display: none;
+            width: 100%;
+            max-width: 900px;
+            background: var(--surface-color);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+            padding: 32px;
+            position: relative;
+            min-height: 500px;
+            border: 1px solid var(--border-color);
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* SCREEN 1: DASHBOARD */
+        .header-actions {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 32px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .data-table th {
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .data-table td {
+            padding: 18px 0;
+            vertical-align: middle;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .empty-state {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 60px 0;
+            font-style: italic;
+        }
+
+        .file-cell {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .file-icon {
+            width: 40px;
+            height: 46px;
+            background-color: #e0f2fe;
+            border-radius: 6px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #bae6fd;
+        }
+
+        .file-icon::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 10px;
+            height: 10px;
+            background: var(--surface-color);
+            border-bottom-left-radius: 4px;
+            border-left: 1px solid #bae6fd;
+            border-bottom: 1px solid #bae6fd;
+        }
+
+        .icon-text {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #ef4444;
+            margin-top: 4px;
+        }
+
+        .file-name {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .file-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .mode-text {
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .status-badge {
+            font-weight: 600;
+            color: var(--pending);
+        }
+
+        .actions-cell {
+            text-align: right;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            margin-left: 8px;
+        }
+
+        .action-btn svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        /* GLOBAL FIXED FLOATING ACTION BUTTON SYSTEM */
+        .fab {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            width: 56px;
+            height: 56px;
+            background-color: #93c5fd;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            border: none;
+            z-index: 9999; /* Higher priority layering ensures no interception */
+            box-shadow: 0 4px 10px rgb(0 0 0 / 0.15);
+        }
+
+        .fab svg {
+            width: 24px;
+            height: 24px;
+            stroke: #fff;
+            stroke-width: 2.5;
+            pointer-events: none; /* Allows direct interaction through child paths */
+        }
+
+        /* SCREEN 2: NEW PAPER FORM */
+        .form-title-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .form-file-icon {
+            width: 65px;
+            height: 80px;
+            background-color: #bfdbfe;
+            border-radius: 8px;
+            position: relative;
+            border: 1px solid #93c5fd;
+        }
+
+        .form-file-icon::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 18px;
+            height: 18px;
+            background: var(--surface-color);
+            border-bottom-left-radius: 6px;
+            border-left: 1px solid #93c5fd;
+            border-bottom: 1px solid #93c5fd;
+        }
+
+        .form-file-icon::before {
+            content: '—\n—\n—\n—';
+            position: absolute;
+            left: 12px;
+            top: 20px;
+            color: #475569;
+            font-size: 12px;
+            line-height: 10px;
+        }
+
+        .form-fields {
+            flex-grow: 1;
+        }
+
+        .form-heading {
+            text-align: center;
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .form-group label {
+            font-size: 1.2rem;
+            font-weight: 700;
+            min-width: 80px;
+        }
+
+        .input-underline {
+            flex-grow: 1;
+            border: none;
+            border-bottom: 2px solid #cbd5e1;
+            font-size: 1.1rem;
+            padding: 4px 0;
+            outline: none;
+        }
+
+        .checkbox-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+
+        .checkbox-item input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent-blue);
+        }
+
+        .select-custom {
+            font-size: 1.1rem;
+            padding: 4px 24px 4px 0;
+            border: none;
+            border-bottom: 2px solid #cbd5e1;
+            background: transparent;
+            outline: none;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .btn-secondary {
+            background-color: var(--btn-blue);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .form-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 16px;
+            margin-top: 40px;
+        }
+
+        /* SCREEN 3: CHAPTER SELECTION OVERLAY */
+        .chapters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .chapter-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px;
+            background: #f1f5f9;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .chapter-card input {
+            margin-top: 3px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="dashboardScreen" class="screen active">
+        <div class="header-actions">
+            <svg style="width:20px; height:20px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <span>12:36 A.M.</span>
+        </div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th style="width: 45%;">Name</th>
+                    <th style="width: 20%;">Mode</th>
+                    <th style="width: 20%;">Status</th>
+                    <th style="width: 15%;"></th>
+                </tr>
+            </thead>
+            <tbody id="papersTableBody">
+                </tbody>
+        </table>
+        
+        <div id="emptyState" class="empty-state">No papers created yet. Click the '+' button to add one.</div>
+    </div>
+
+
+    <div id="formScreen" class="screen">
+        <div class="form-heading">New Paper</div>
+        
+        <div class="form-title-container">
+            <div class="form-file-icon"></div>
+            <div class="form-fields">
+                <div class="form-group">
+                    <label>Name:</label>
+                    <input type="text" id="paperName" class="input-underline" placeholder="Enter paper code or title">
+                </div>
+
+                <div class="form-group" style="align-items: flex-start;">
+                    <label style="margin-top: 2px;">Subject:</label>
+                    <div class="checkbox-container">
+                        <label class="checkbox-item"><input type="checkbox" name="subject" value="Physics"> Physics</label>
+                        <label class="checkbox-item"><input type="checkbox" name="subject" value="Chemistry"> Chemistry</label>
+                        <label class="checkbox-item"><input type="checkbox" name="subject" value="Computer"> Computer</label>
+                        <label class="checkbox-item"><input type="checkbox" name="subject" value="Biology"> Biology</label>
+                        <label class="checkbox-item"><input type="checkbox" name="subject" value="Mathematics"> Mathematics</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" style="margin-left: 89px;">
+            <label style="min-width: 70px;">Board:</label>
+            <select id="boardSelect" class="select-custom">
+                <option value="" disabled selected>Choose board</option>
+                <option value="ICSE">ICSE</option>
+                <option value="CBSE">CBSE</option>
+                <option value="Others">Others</option>
+            </select>
+        </div>
+
+        <div class="form-group" style="margin-left: 89px;">
+            <label style="min-width: 70px;">Class:</label>
+            <select id="classSelect" class="select-custom">
+                <option value="" disabled selected>Choose Class</option>
+                <option value="6th">Class 6th</option>
+                <option value="7th">Class 7th</option>
+                <option value="8th">Class 8th</option>
+                <option value="9th">Class 9th</option>
+                <option value="10th">Class 10th</option>
+                <option value="11th">Class 11th</option>
+                <option value="12th">Class 12th</option>
+            </select>
+        </div>
+
+        <div style="margin-left: 89px;">
+            <button type="button" class="btn-secondary" onclick="openChaptersScreen()">Choose Chapters</button>
+            <div id="selectedChaptersCount" style="font-size: 0.85rem; color: var(--success); margin-top: 6px; font-weight: 600;"></div>
+        </div>
+
+        <div class="form-footer">
+            <button class="btn-secondary" style="background-color:#cbd5e1;" onclick="resetForm(); navigateTo('dashboardScreen');">Cancel</button>
+            <button class="btn-secondary" onclick="savePaper()">Done!</button>
+        </div>
+    </div>
+
+
+    <div id="chaptersScreen" class="screen">
+        <div class="form-heading" id="chaptersHeaderTitle">Select Chapters</div>
+        <p style="color: var(--text-muted); text-align: center; margin-bottom: 20px;">Pick the target topics for this item resource generation.</p>
+        
+        <div class="chapters-grid" id="chaptersContainer">
+            </div>
+
+        <div class="form-footer">
+            <button class="btn-secondary" onclick="navigateTo('formScreen')">Back to Setup</button>
+        </div>
+    </div>
+
+
+    <button id="globalAddBtn" class="fab" onclick="navigateTo('formScreen')">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+    </button>
+
+
+    <script>
+        // Dummy Repository mapped dynamically by Subject selection context
+        const chapterDatabase = {
+            "Physics": ["Force, Work, Power & Energy", "Light & Spectrum", "Sound Waves", "Electricity & Magnetism", "Heat & Thermodynamics", "Modern Physics"],
+            "Chemistry": ["Periodic Properties", "Chemical Bonding", "Acids, Bases & Salts", "Analytical Chemistry", "Mole Concept", "Metallurgy", "Organic Chemistry"],
+            "Computer": ["Object Oriented Programming", "User-Defined Methods", "Constructors & Overloading", "Library Classes", "Encapsulation & Arrays", "String Handling"],
+            "Biology": ["Cell Division & Chromosomes", "Plant Physiology & Transpiration", "Circulatory System", "Excretory System", "Nervous System", "Endocrine & Genetics"],
+            "Mathematics": ["Commercial Algebra (GST)", "Algebra & Quadratic Equations", "Geometry & Circles", "Trigonometry", "Mensuration", "Statistics & Probability"]
+        };
+
+        let activeSelectedChapters = [];
+
+        // Handle Mutex Behavior on Checkboxes (Only allow one choice)
+        const checkboxes = document.querySelectorAll('input[name="subject"]');
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', function() {
+                if(this.checked) {
+                    checkboxes.forEach(innerCb => { if(innerCb !== this) innerCb.checked = false; });
+                    // Clear previously selected chapters if switching subjects
+                    activeSelectedChapters = [];
+                    document.getElementById('selectedChaptersCount').innerText = "";
+                }
+            });
+        });
+
+        // SPA Navigation Helper - With absolute management of the interface trigger handles
+        function navigateTo(screenId) {
+            document.querySelectorAll('.screen').forEach(scr => scr.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            
+            // Only toggle visibility layout if looking directly at the workspace list
+            const fab = document.getElementById('globalAddBtn');
+            if (screenId === 'dashboardScreen') {
+                fab.style.display = 'flex';
+            } else {
+                fab.style.display = 'none';
+            }
+        }
+
+        // Generate isolated screen for Chapters
+        function openChaptersScreen() {
+            const selectedSubjectCb = document.querySelector('input[name="subject"]:checked');
+            if(!selectedSubjectCb) {
+                alert("Please select a Subject first!");
+                return;
+            }
+            
+            const subject = selectedSubjectCb.value;
+            const container = document.getElementById('chaptersContainer');
+            document.getElementById('chaptersHeaderTitle').innerText = `${subject} Chapter Modules`;
+            container.innerHTML = "";
+
+            const chapters = chapterDatabase[subject] || ["General Chapter Module 1", "General Chapter Module 2", "Review Module Overview"];
+            
+            chapters.forEach((chap, index) => {
+                const isChecked = activeSelectedChapters.includes(chap) ? 'checked' : '';
+                const card = document.createElement('div');
+                card.className = 'chapter-card';
+                card.innerHTML = `
+                    <input type="checkbox" id="chap_${index}" value="${chap}" ${isChecked} onchange="toggleChapter(this)">
+                    <label for="chap_${index}"><strong>${chap}</strong><br><span style="font-size:0.8rem; color:var(--text-muted);">Core curriculum syllabus component</span></label>
+                `;
+                container.appendChild(card);
+            });
+
+            navigateTo('chaptersScreen');
+        }
+
+        function toggleChapter(checkbox) {
+            if(checkbox.checked) {
+                if(!activeSelectedChapters.includes(checkbox.value)) activeSelectedChapters.push(checkbox.value);
+            } else {
+                activeSelectedChapters = activeSelectedChapters.filter(item => item !== checkbox.value);
+            }
+            
+            const countDiv = document.getElementById('selectedChaptersCount');
+            countDiv.innerText = activeSelectedChapters.length > 0 ? `✓ ${activeSelectedChapters.length} chapter(s) selected` : "";
+        }
+
+        // Commit Form Submission and Append to Dashboard
+        // Automatically sync your dashboard history view when the window opens
+window.addEventListener('pywebviewready', function() {
+    loadDashboardFromDB();
+});
+
+function loadDashboardFromDB() {
+    pywebview.api.fetch_saved_papers().then(response => {
+        const tableBody = document.getElementById('papersTableBody');
+        const emptyState = document.getElementById('emptyState');
+        
+        tableBody.innerHTML = ""; // Empty dynamic DOM space
+
+        if(!response || response.length === 0 || response.error) {
+            emptyState.style.display = 'block';
+            return;
+        }
+
+        emptyState.style.display = 'none';
+        
+        response.forEach(paper => {
+            const prefixCode = paper.subject.substring(0, 4).toUpperCase();
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>
+                    <div class="file-cell">
+                        <div class="file-icon">
+                            <span class="icon-text">${prefixCode.substring(0,2)}</span>
+                        </div>
+                        <div>
+                            <div class="file-name">${paper.name}</div>
+                            <div class="file-subtitle">Board:${paper.board} • Class:${paper.class_name}</div>
+                        </div>
+                    </div>
+                </td>
+                <td><span class="mode-text online">Local</span></td>
+                <td><span class="status-badge">${paper.status}</span></td>
+                <td class="actions-cell">
+                    <button class="action-btn" onclick="attemptPaper(${paper.id})" style="cursor:pointer;">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
+                    </button>
+                </td>
+            `;
+            tableBody.appendChild(tr);
+        });
+    });
+}
+
+function savePaper() {
+    const name = document.getElementById('paperName').value.trim();
+    const subjectCb = document.querySelector('input[name="subject"]:checked');
+    const board = document.getElementById('boardSelect').value;
+    const className = document.getElementById('classSelect').value;
+
+    if(!name || !subjectCb || !board || !className) {
+        alert("Please fully fill all fields before hitting Done!");
+        return;
+    }
+
+    const subject = subjectCb.value;
+
+    // Send payload directly into SQLite via python bridge pipeline
+    pywebview.api.generate_and_save_paper(name, subject, board, className, activeSelectedChapters).then(res => {
+        if(res.status === 'success') {
+            resetForm();
+            loadDashboardFromDB(); // Repopulate list using actual DB rows
+            navigateTo('dashboardScreen');
+        } else {
+            alert("Database write error: " + res.message);
+        }
+    });
+}
+
+function attemptPaper(paperId) {
+    alert("Launching Mock Exam Interface for Document ID Reference: " + paperId);
+    // Next Step: Query your SQLite backend for questions matching this paper configuration!
+}
+
+        function resetForm() {
+            document.getElementById('paperName').value = "";
+            checkboxes.forEach(cb => cb.checked = false);
+            document.getElementById('boardSelect').selectedIndex = 0;
+            document.getElementById('classSelect').selectedIndex = 0;
+            activeSelectedChapters = [];
+            document.getElementById('selectedChaptersCount').innerText = "";
+        }
+    </script>
+</body>
+</html>
