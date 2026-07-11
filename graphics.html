@@ -34,7 +34,6 @@
             padding: 20px;
         }
 
-        /* Screen Wrapper */
         .screen {
             display: none;
             width: 100%;
@@ -52,7 +51,6 @@
             display: block;
         }
 
-        /* SCREEN 1: DASHBOARD */
         .header-actions {
             display: flex;
             justify-content: flex-end;
@@ -166,7 +164,6 @@
             height: 22px;
         }
 
-        /* GLOBAL FIXED FLOATING ACTION BUTTON SYSTEM */
         .fab {
             position: fixed;
             bottom: 32px;
@@ -181,7 +178,7 @@
             color: white;
             cursor: pointer;
             border: none;
-            z-index: 9999; /* Higher priority layering ensures no interception */
+            z-index: 9999;
             box-shadow: 0 4px 10px rgb(0 0 0 / 0.15);
         }
 
@@ -190,10 +187,9 @@
             height: 24px;
             stroke: #fff;
             stroke-width: 2.5;
-            pointer-events: none; /* Allows direct interaction through child paths */
+            pointer-events: none;
         }
 
-        /* SCREEN 2: NEW PAPER FORM */
         .form-title-container {
             display: flex;
             align-items: flex-start;
@@ -221,16 +217,6 @@
             border-bottom-left-radius: 6px;
             border-left: 1px solid #93c5fd;
             border-bottom: 1px solid #93c5fd;
-        }
-
-        .form-file-icon::before {
-            content: '—\n—\n—\n—';
-            position: absolute;
-            left: 12px;
-            top: 20px;
-            color: #475569;
-            font-size: 12px;
-            line-height: 10px;
         }
 
         .form-fields {
@@ -317,7 +303,6 @@
             margin-top: 40px;
         }
 
-        /* SCREEN 3: CHAPTER SELECTION OVERLAY */
         .chapters-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -338,39 +323,36 @@
             cursor: pointer;
         }
 
-        .chapter-card input {
-            margin-top: 3px;
-        }
-        /* Option Button Base */
         .option-btn {
             width: 100%;
-        padding: 14px 20px;
-        text-align: left;
-        background: var(--surface-color);
-        border: 1px solid var(--border-color);
-        border-radius: 8px;
-        font-size: 1rem;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        color: var(--text-primary);
-    }
+            padding: 14px 20px;
+            text-align: left;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-primary);
+        }
+
         .option-btn:hover:not(:disabled) {
-        background: #f1f5f9;
-        border-color: #cbd5e1;
-    }
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
 
         .option-btn.correct {
-        background: #d1fae5 !important;
-        border-color: var(--success) !important;
-        color: #065f46 !important;
-        font-weight: 600;
-    }
+            background: #d1fae5 !important;
+            border-color: var(--success) !important;
+            color: #065f46 !important;
+            font-weight: 600;
+        }
 
         .option-btn.wrong {
-        background: #fee2e2 !important;
-        border-color: #ef4444 !important;
-        color: #991b1b !important;
-    }
+            background: #fee2e2 !important;
+            border-color: #ef4444 !important;
+            color: #991b1b !important;
+        }
     </style>
 </head>
 <body>
@@ -381,7 +363,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
-            <span>12:36 A.M.</span>
+            <div id="clock">12:36 A.M.</div>
         </div>
         <table class="data-table">
             <thead>
@@ -392,43 +374,34 @@
                     <th style="width: 15%;"></th>
                 </tr>
             </thead>
-            <tbody id="papersTableBody">
-                </tbody>
+            <tbody id="papersTableBody"></tbody>
         </table>
-        
         <div id="emptyState" class="empty-state">No papers created yet. Click the '+' button to add one.</div>
     </div>
+
     <div id="quizScreen" class="screen">
-    <div class="quiz-container" style="padding: 24px; max-width: 650px; margin: 0 auto;">
-        
-        <div class="quiz-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2 id="quizTitle" style="font-size: 1.4rem; color: var(--text-primary);">Exam Session</h2>
-            <button onclick="navigateTo('dashboardScreen')" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.2rem;">✕ Exit</button>
-        </div>
-
-        <div class="progress-track" style="background: var(--border-color); border-radius: 8px; height: 8px; width: 100%; margin-bottom: 25px; overflow: hidden;">
-            <div id="quizProgressBar" style="background: var(--accent-blue); height: 100%; width: 0%; transition: width 0.3s ease;"></div>
-        </div>
-
-        <div class="question-container" style="margin-bottom: 24px;">
-            <p id="questionText" style="font-size: 1.25rem; font-weight: 500; line-height: 1.5; color: var(--text-primary);">Loading question...</p>
-        </div>
-
-        <div id="optionsGrid" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px;">
+        <div class="quiz-container" style="padding: 24px; max-width: 650px; margin: 0 auto;">
+            <div class="quiz-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 id="quizTitle" style="font-size: 1.4rem; color: var(--text-primary);">Exam Session</h2>
+                <button onclick="navigateTo('dashboardScreen')" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.2rem;">✕ Exit</button>
             </div>
-
-        <div class="quiz-controls" style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 20px;">
-            <button id="prevBtn" onclick="prevQuestion()" style="padding: 10px 20px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--surface-color); color: var(--text-muted); cursor: pointer; font-weight: 500;" disabled>Previous</button>
-            <span id="questionCount" style="color: var(--text-muted); font-weight: 500; font-size: 0.95rem;">0 / 0</span>
-            <button id="nextBtn" onclick="nextQuestion()" style="padding: 10px 20px; border: none; border-radius: 6px; background: var(--accent-blue); color: white; cursor: pointer; font-weight: 500;" disabled>Next Question</button>
+            <div class="progress-track" style="background: var(--border-color); border-radius: 8px; height: 8px; width: 100%; margin-bottom: 25px; overflow: hidden;">
+                <div id="quizProgressBar" style="background: var(--accent-blue); height: 100%; width: 0%; transition: width 0.3s ease;"></div>
+            </div>
+            <div class="question-container" style="margin-bottom: 24px;">
+                <p id="questionText" style="font-size: 1.25rem; font-weight: 500; line-height: 1.5; color: var(--text-primary);">Loading question...</p>
+            </div>
+            <div id="optionsGrid" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px;"></div>
+            <div class="quiz-controls" style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 20px;">
+                <button id="prevBtn" onclick="prevQuestion()" style="padding: 10px 20px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--surface-color); color: var(--text-muted); cursor: pointer; font-weight: 500;" disabled>Previous</button>
+                <span id="questionCount" style="color: var(--text-muted); font-weight: 500; font-size: 0.95rem;">0 / 0</span>
+                <button id="nextBtn" onclick="nextQuestion()" style="padding: 10px 20px; border: none; border-radius: 6px; background: var(--accent-blue); color: white; cursor: pointer; font-weight: 500;" disabled>Next Question</button>
+            </div>
         </div>
     </div>
-</div>
-
 
     <div id="formScreen" class="screen">
         <div class="form-heading">New Paper</div>
-        
         <div class="form-title-container">
             <div class="form-file-icon"></div>
             <div class="form-fields">
@@ -436,7 +409,6 @@
                     <label>Name:</label>
                     <input type="text" id="paperName" class="input-underline" placeholder="Enter paper code or title">
                 </div>
-
                 <div class="form-group" style="align-items: flex-start;">
                     <label style="margin-top: 2px;">Subject:</label>
                     <div class="checkbox-container">
@@ -449,92 +421,76 @@
                 </div>
             </div>
         </div>
-
         <div class="form-group" style="margin-left: 89px;">
             <label style="min-width: 70px;">Board:</label>
             <select id="boardSelect" class="select-custom">
                 <option value="" disabled selected>Choose board</option>
                 <option value="ICSE">ICSE</option>
                 <option value="CBSE">CBSE</option>
-                <option value="Others">Others</option>
             </select>
         </div>
-
         <div class="form-group" style="margin-left: 89px;">
             <label style="min-width: 70px;">Class:</label>
             <select id="classSelect" class="select-custom">
                 <option value="" disabled selected>Choose Class</option>
-                <option value="6th">Class 6th</option>
-                <option value="7th">Class 7th</option>
-                <option value="8th">Class 8th</option>
-                <option value="9th">Class 9th</option>
-                <option value="10th">Class 10th</option>
-                <option value="11th">Class 11th</option>
-                <option value="12th">Class 12th</option>
+                <option value="Class 6">Class 6th</option>
+                <option value="Class 7">Class 7th</option>
+                <option value="Class 8">Class 8th</option>
+                <option value="Class 9">Class 9th</option>
+                <option value="Class 10">Class 10th</option>
+                <option value="Class 11">Class 11th</option>
+                <option value="Class 12">Class 12th</option>
             </select>
         </div>
-
         <div style="margin-left: 89px;">
             <button type="button" class="btn-secondary" onclick="openChaptersScreen()">Choose Chapters</button>
             <div id="selectedChaptersCount" style="font-size: 0.85rem; color: var(--success); margin-top: 6px; font-weight: 600;"></div>
         </div>
-
         <div class="form-footer">
             <button class="btn-secondary" style="background-color:#cbd5e1;" onclick="resetForm(); navigateTo('dashboardScreen');">Cancel</button>
             <button class="btn-secondary" onclick="savePaper()">Done!</button>
         </div>
     </div>
 
-
     <div id="chaptersScreen" class="screen">
         <div class="form-heading" id="chaptersHeaderTitle">Select Chapters</div>
         <p style="color: var(--text-muted); text-align: center; margin-bottom: 20px;">Pick the target topics for this item resource generation.</p>
-        
-        <div class="chapters-grid" id="chaptersContainer">
-            </div>
-
+        <div class="chapters-grid" id="chaptersContainer"></div>
         <div class="form-footer">
             <button class="btn-secondary" onclick="navigateTo('formScreen')">Back to Setup</button>
         </div>
     </div>
 
-
     <button id="globalAddBtn" class="fab" onclick="navigateTo('formScreen')">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
     </button>
 
-
     <script>
-        // Dummy Repository mapped dynamically by Subject selection context
         const chapterDatabase = {
-            "Physics": ["Force, Work, Power & Energy", "Light & Spectrum", "Sound Waves", "Electricity & Magnetism", "Heat & Thermodynamics", "Modern Physics"],
-            "Chemistry": ["Periodic Properties", "Chemical Bonding", "Acids, Bases & Salts", "Analytical Chemistry", "Mole Concept", "Metallurgy", "Organic Chemistry"],
-            "Computer": ["Object Oriented Programming", "User-Defined Methods", "Constructors & Overloading", "Library Classes", "Encapsulation & Arrays", "String Handling"],
-            "Biology": ["Cell Division & Chromosomes", "Plant Physiology & Transpiration", "Circulatory System", "Excretory System", "Nervous System", "Endocrine & Genetics"],
-            "Mathematics": ["Commercial Algebra (GST)", "Algebra & Quadratic Equations", "Geometry & Circles", "Trigonometry", "Mensuration", "Statistics & Probability"]
+            "Physics": ["Motion and Measurement", "Force", "Heat", "Light Energy", "Sound", "Heat Transfer", "Gravitation", "Laws of Motion", "Light Reflection", "Mechanics", "Thermodynamics", "Magnetism", "Current Electricity"],
+            "Chemistry": ["Sorting Materials", "Matter", "Acids, Bases and Salts", "Elements, Compounds and Mixtures", "Coal and Petroleum", "Atomic Structure", "Atoms and Molecules", "Gas Laws", "Carbon and its Compounds", "Periodic Table", "Chemical Bonding", "Chemical Kinetics", "Coordination Compounds"],
+            "Computer": ["Computer Fundamentals", "Categories of Computers", "Computer Viruses", "Number Systems", "Networking Concepts", "Operating Systems", "Python Basics", "Java Intro", "Web Technology", "User Defined Methods", "Python Sequences", "Java Arrays", "Database Concepts", "Data Structures"],
+            "Biology": ["Getting to Know Plants", "The Leaf", "Nutrition in Plants", "Kingdom Classification", "Cell Structure", "Ecosystems", "Tissues", "Cell and its Structure", "Life Processes", "Circulatory System", "Cell Cycle", "Plant Physiology", "Genetics", "Biotechnology"],
+            "Mathematics": ["Basic Geometrical Ideas", "Integers", "Algebraic Expressions", "Ratios and Proportions", "Exponents", "Factorisation", "Polynomials", "Coordinate Geometry", "Trigonometry", "Arithmetic Progression", "Sets", "Complex Numbers", "Matrices", "Calculus"]
         };
 
         let activeSelectedChapters = [];
 
-        // Handle Mutex Behavior on Checkboxes (Only allow one choice)
         const checkboxes = document.querySelectorAll('input[name="subject"]');
         checkboxes.forEach(cb => {
             cb.addEventListener('change', function() {
                 if(this.checked) {
                     checkboxes.forEach(innerCb => { if(innerCb !== this) innerCb.checked = false; });
-                    // Clear previously selected chapters if switching subjects
                     activeSelectedChapters = [];
                     document.getElementById('selectedChaptersCount').innerText = "";
                 }
             });
         });
 
-        // SPA Navigation Helper - With absolute management of the interface trigger handles
         function navigateTo(screenId) {
             document.querySelectorAll('.screen').forEach(scr => scr.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
             
-            // Only toggle visibility layout if looking directly at the workspace list
             const fab = document.getElementById('globalAddBtn');
             if (screenId === 'dashboardScreen') {
                 fab.style.display = 'flex';
@@ -543,7 +499,6 @@
             }
         }
 
-        // Generate isolated screen for Chapters
         function openChaptersScreen() {
             const selectedSubjectCb = document.querySelector('input[name="subject"]:checked');
             if(!selectedSubjectCb) {
@@ -556,7 +511,7 @@
             document.getElementById('chaptersHeaderTitle').innerText = `${subject} Chapter Modules`;
             container.innerHTML = "";
 
-            const chapters = chapterDatabase[subject] || ["General Chapter Module 1", "General Chapter Module 2", "Review Module Overview"];
+            const chapters = chapterDatabase[subject] || ["General Core Review Module"];
             
             chapters.forEach((chap, index) => {
                 const isChecked = activeSelectedChapters.includes(chap) ? 'checked' : '';
@@ -564,7 +519,7 @@
                 card.className = 'chapter-card';
                 card.innerHTML = `
                     <input type="checkbox" id="chap_${index}" value="${chap}" ${isChecked} onchange="toggleChapter(this)">
-                    <label for="chap_${index}"><strong>${chap}</strong><br><span style="font-size:0.8rem; color:var(--text-muted);">Core curriculum syllabus component</span></label>
+                    <label for="chap_${index}"><strong>${chap}</strong><br><span style="font-size:0.8rem; color:var(--text-muted);">Syllabus component</span></label>
                 `;
                 container.appendChild(card);
             });
@@ -583,92 +538,194 @@
             countDiv.innerText = activeSelectedChapters.length > 0 ? `✓ ${activeSelectedChapters.length} chapter(s) selected` : "";
         }
 
-        // Commit Form Submission and Append to Dashboard
-        // Automatically sync your dashboard history view when the window opens
-window.addEventListener('pywebviewready', function() {
-    loadDashboardFromDB();
-});
-
-function loadDashboardFromDB() {
-    pywebview.api.fetch_saved_papers().then(response => {
-        const tableBody = document.getElementById('papersTableBody');
-        const emptyState = document.getElementById('emptyState');
-        
-        tableBody.innerHTML = ""; // Clear dynamic DOM space
-
-        if(!response || response.length === 0 || response.error) {
-            emptyState.style.display = 'block';
-            return;
-        }
-
-        emptyState.style.display = 'none';
-        
-        response.forEach(paper => {
-            // Extract attributes safely from the database entry object
-            const paperName = paper.name || "Untitled Paper";
-            const paperBoard = paper.board || "N/A";
-            const paperClass = paper.class || paper.className || "N/A";
-            const paperSubject = paper.subject || "Subject";
-
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>
-                    <div class="file-cell">
-                        <div class="file-icon">
-                            <span class="icon-text" style="color: var(--accent-blue); font-size: 0.75rem;">
-                                ${paperSubject.substring(0, 3).toUpperCase()}
-                            </span>
-                        </div>
-                        <div>
-                            <div class="file-name">${paperName}</div>
-                            <div class="file-subtitle">Board: ${paperBoard} • Class: ${paperClass} • Subject: ${paperSubject}</div>
-                        </div>
-                    </div>
-                </td>
-                <td><span class="mode-text online">Local</span></td>
-                <td><span class="status-badge">Pending</span></td>
-                <td class="actions-cell">
-                    <button class="action-btn" onclick="initializeQuiz('${paperSubject}','${paperName}')" style="cursor:pointer; opacity:1;">
-                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                        </svg>
-                    </button>
-                </td>
-            `;
-            tableBody.appendChild(tr);
+        window.addEventListener('pywebviewready', function() {
+            loadDashboardFromDB();
         });
-    });
-}
 
-function savePaper() {
-    const name = document.getElementById('paperName').value.trim();
-    const subjectCb = document.querySelector('input[name="subject"]:checked');
-    const board = document.getElementById('boardSelect').value;
-    const className = document.getElementById('classSelect').value;
+        function loadDashboardFromDB() {
+            pywebview.api.fetch_saved_papers().then(response => {
+                const tableBody = document.getElementById('papersTableBody');
+                const emptyState = document.getElementById('emptyState');
+                
+                tableBody.innerHTML = "";
 
-    if(!name || !subjectCb || !board || !className) {
-        alert("Please fully fill all fields before hitting Done!");
-        return;
-    }
+                if(!response || response.length === 0 || response.error) {
+                    emptyState.style.display = 'block';
+                    return;
+                }
 
-    const subject = subjectCb.value;
+                emptyState.style.display = 'none';
+                
+                response.forEach(paper => {
+                    const paperName = paper.name || "Untitled Paper";
+                    const paperBoard = paper.board || "N/A";
+                    const paperClass = paper.class_name || paper.className || "N/A";
+                    const paperSubject = paper.subject || "Subject";
 
-    // Send payload directly into SQLite via python bridge pipeline
-    pywebview.api.generate_and_save_paper(name, subject, board, className, activeSelectedChapters).then(res => {
-        if(res.status === 'success') {
-            resetForm();
-            loadDashboardFromDB(); // Repopulate list using actual DB rows
-            navigateTo('dashboardScreen');
-        } else {
-            alert("Database write error: " + res.message);
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>
+                            <div class="file-cell">
+                                <div class="file-icon">
+                                    <span class="icon-text" style="color: var(--accent-blue); font-size: 0.75rem;">
+                                        ${paperSubject.substring(0, 3).toUpperCase()}
+                                    </span>
+                                </div>
+                                <div>
+                                    <div class="file-name">${paperName}</div>
+                                    <div class="file-subtitle">Board: ${paperBoard} • Class: ${paperClass} • Subject: ${paperSubject}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="mode-text online">Local</span></td>
+                        <td><span class="status-badge">Pending</span></td>
+                        <td class="actions-cell">
+                            <button class="action-btn" onclick="initializeQuiz('${paperSubject}', '${paperBoard}', '${paperClass}', '${paperName}')" style="cursor:pointer; opacity:1;">
+                                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                                </svg>
+                            </button>
+                        </td>
+                    `;
+                    tableBody.appendChild(tr);
+                });
+            });
         }
-    });
-}
 
-function attemptPaper(paperId) {
-    alert("Launching Mock Exam Interface for Document ID Reference: " + paperId);
-    // Next Step: Query your SQLite backend for questions matching this paper configuration!
-}
+        function savePaper() {
+            const name = document.getElementById('paperName').value.trim();
+            const subjectCb = document.querySelector('input[name="subject"]:checked');
+            const board = document.getElementById('boardSelect').value;
+            const className = document.getElementById('classSelect').value;
+
+            if(!name || !subjectCb || !board || !className) {
+                alert("Please fully fill all fields before hitting Done!");
+                return;
+            }
+
+            const subject = subjectCb.value;
+
+            pywebview.api.generate_and_save_paper(name, subject, board, className, activeSelectedChapters).then(res => {
+                if(res.status === 'success') {
+                    resetForm();
+                    loadDashboardFromDB(); 
+                    navigateTo('dashboardScreen');
+                } else {
+                    alert("Database write error: " + res.message);
+                }
+            });
+        }
+
+        let quizQuestions = [];
+        let currentQuestionIndex = 0;
+        let userAnswers = {}; 
+
+        function initializeQuiz(subject, board, class_name, paperName) {
+            document.getElementById('quizTitle').innerText = `${paperName}`;
+            document.getElementById('questionText').innerText = "Accessing localized engine questions...";
+            document.getElementById('optionsGrid').innerHTML = "";
+            
+            navigateTo('quizScreen');
+            
+            if (window.pywebview && window.pywebview.api) {
+                // Relaying all 3 relational dependencies down the execution wire
+                window.pywebview.api.fetch_quiz_questions(subject, board, class_name)
+                    .then(response => {
+                        quizQuestions = JSON.parse(response);
+                        currentQuestionIndex = 0;
+                        userAnswers = {};
+                        
+                        if (quizQuestions.length === 0) {
+                            document.getElementById('questionText').innerText = "No exact questions found matching this Subject, Class, and Board configuration.";
+                            document.getElementById('questionCount').innerText = "0 / 0";
+                            return;
+                        }
+                        displayQuestion();
+                    })
+                    .catch(err => {
+                        console.error("Bridge Failure:", err);
+                        document.getElementById('questionText').innerText = "Critical error reading system storage.";
+                    });
+            }
+        }
+
+        function displayQuestion() {
+            if (quizQuestions.length === 0) return;
+            
+            const currentQuestion = quizQuestions[currentQuestionIndex];
+            document.getElementById('questionText').innerText = currentQuestion.question;
+            
+            const progressPercent = ((currentQuestionIndex + 1) / quizQuestions.length) * 100;
+            document.getElementById('quizProgressBar').style.width = `${progressPercent}%`;
+            document.getElementById('questionCount').innerText = `${currentQuestionIndex + 1} / ${quizQuestions.length}`;
+            
+            const optionsGrid = document.getElementById('optionsGrid');
+            optionsGrid.innerHTML = "";
+            
+            const optionLabels = ['A', 'B', 'C', 'D'];
+            
+            currentQuestion.options.forEach((optionText, idx) => {
+                const label = optionLabels[idx];
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = `${label}. ${optionText}`;
+                btn.dataset.label = label;
+                
+                btn.onclick = () => handleOptionSelection(label);
+                
+                if (userAnswers[currentQuestionIndex] !== undefined) {
+                    btn.disabled = true;
+                    if (label === currentQuestion.correct) {
+                        btn.classList.add('correct');
+                    } else if (label === userAnswers[currentQuestionIndex]) {
+                        btn.classList.add('wrong');
+                    }
+                }
+                
+                optionsGrid.appendChild(btn);
+            });
+            
+            document.getElementById('prevBtn').disabled = currentQuestionIndex === 0;
+            document.getElementById('nextBtn').disabled = userAnswers[currentQuestionIndex] === undefined;
+            document.getElementById('nextBtn').innerText = (currentQuestionIndex === quizQuestions.length - 1) ? "Finish" : "Next Question";
+        }
+
+        function handleOptionSelection(selectedLabel) {
+            if (userAnswers[currentQuestionIndex] !== undefined) return;
+            
+            const currentQuestion = quizQuestions[currentQuestionIndex];
+            userAnswers[currentQuestionIndex] = selectedLabel;
+            
+            const buttons = document.querySelectorAll('#optionsGrid .option-btn');
+            
+            buttons.forEach(btn => {
+                btn.disabled = true; 
+                if (btn.dataset.label === currentQuestion.correct) {
+                    btn.classList.add('correct'); 
+                } else if (btn.dataset.label === selectedLabel) {
+                    btn.classList.add('wrong'); 
+                }
+            });
+            
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < quizQuestions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("Quiz evaluation complete. Returning to the exam dashboard.");
+                navigateTo('dashboardScreen');
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+            }
+        }        
 
         function resetForm() {
             document.getElementById('paperName').value = "";
@@ -678,132 +735,24 @@ function attemptPaper(paperId) {
             activeSelectedChapters = [];
             document.getElementById('selectedChaptersCount').innerText = "";
         }
-// State Tracking Variables
-let quizQuestions = [];
-let currentQuestionIndex = 0;
-let userAnswers = {}; 
 
-function initializeQuiz(subject, paperName) {
-    document.getElementById('quizTitle').innerText = `${paperName}`;
-    document.getElementById('questionText').innerText = "Accessing localized engine questions...";
-    document.getElementById('optionsGrid').innerHTML = "";
-    
-    // Redirect view layout structure to the quiz screen
-    navigateTo('quizScreen');
-    
-    // Fire execution flow over the pywebview bridge using the clean single-parameter signature
-    if (window.pywebview && window.pywebview.api) {
-        window.pywebview.api.fetch_quiz_questions(subject)
-            .then(response => {
-                quizQuestions = JSON.parse(response);
-                currentQuestionIndex = 0;
-                userAnswers = {};
+        function startLiveClock() {
+            function updateClock() {
+                const now = new Date();
+                let hours = now.getHours();
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const ampm = hours >= 12 ? 'P.M.' : 'A.M.';
+                hours = hours % 12 || 12;
                 
-                if (quizQuestions.length === 0) {
-                    document.getElementById('questionText').innerText = "No questions found matching this subject profile.";
-                    document.getElementById('questionCount').innerText = "0 / 0";
-                    return;
+                const clockElement = document.getElementById('clock');
+                if (clockElement) {
+                    clockElement.textContent = `${hours}:${minutes} ${ampm}`;
                 }
-                displayQuestion();
-            })
-            .catch(err => {
-                console.error("Bridge Communication Failure:", err);
-                document.getElementById('questionText').innerText = "Critical error reading system storage.";
-            });
-    } else {
-        // Fallback testing wrapper context for running standalone browsers
-        quizQuestions = [
-            { id: 1, question: "What is the use of an SG bottle?", options: ["for gravity", "for RD", "for measurement", "for volume"], correct: "B" }
-        ];
-        displayQuestion();
-    }
-}
-
-function displayQuestion() {
-    if (quizQuestions.length === 0) return;
-    
-    const currentQuestion = quizQuestions[currentQuestionIndex];
-    document.getElementById('questionText').innerText = currentQuestion.question;
-    
-    // Update live progress tracking status elements
-    const progressPercent = ((currentQuestionIndex + 1) / quizQuestions.length) * 100;
-    document.getElementById('quizProgressBar').style.width = `${progressPercent}%`;
-    document.getElementById('questionCount').innerText = `${currentQuestionIndex + 1} / ${quizQuestions.length}`;
-    
-    // Rebuild option structure mapping configuration array variables
-    const optionsGrid = document.getElementById('optionsGrid');
-    optionsGrid.innerHTML = "";
-    
-    const optionLabels = ['A', 'B', 'C', 'D'];
-    
-    currentQuestion.options.forEach((optionText, idx) => {
-        const label = optionLabels[idx];
-        const btn = document.createElement('button');
-        btn.className = 'option-btn';
-        btn.innerText = `${label}. ${optionText}`;
-        btn.dataset.label = label;
-        
-        btn.onclick = () => handleOptionSelection(label);
-        
-        // Restore locked interface engine state if the user navigates back/forth
-        if (userAnswers[currentQuestionIndex] !== undefined) {
-            btn.disabled = true;
-            if (label === currentQuestion.correct) {
-                btn.classList.add('correct');
-            } else if (label === userAnswers[currentQuestionIndex]) {
-                btn.classList.add('wrong');
             }
+            updateClock(); 
+            setInterval(updateClock, 1000);
         }
-        
-        optionsGrid.appendChild(btn);
-    });
-    
-    // Update track button controls smoothly
-    document.getElementById('prevBtn').disabled = currentQuestionIndex === 0;
-    document.getElementById('nextBtn').disabled = userAnswers[currentQuestionIndex] === undefined;
-    document.getElementById('nextBtn').innerText = (currentQuestionIndex === quizQuestions.length - 1) ? "Finish" : "Next Question";
-}
-
-function handleOptionSelection(selectedLabel) {
-    // Block duplicate clicks / process evaluation checks once
-    if (userAnswers[currentQuestionIndex] !== undefined) return;
-    
-    const currentQuestion = quizQuestions[currentQuestionIndex];
-    userAnswers[currentQuestionIndex] = selectedLabel;
-    
-    const buttons = document.querySelectorAll('#optionsGrid .option-btn');
-    
-    // 4. Evaluate chosen value, execute UI freeze, highlight accurate navigation paths
-    buttons.forEach(btn => {
-        btn.disabled = true; // Immediately lock all selection paths
-        
-        if (btn.dataset.label === currentQuestion.correct) {
-            btn.classList.add('correct'); // Highlights target correct option pathway green
-        } else if (btn.dataset.label === selectedLabel) {
-            btn.classList.add('wrong'); // Marks inaccurate choices red
-        }
-    });
-    
-    // Activate navigation tracks to let users clean forward progress safely
-    document.getElementById('nextBtn').disabled = false;
-}
-
-function nextQuestion() {
-    if (currentQuestionIndex < quizQuestions.length - 1) {
-        currentQuestionIndex++;
-        displayQuestion();
-    } else {
-        alert("Quiz evaluation complete. Returning to the exam control console.");
-        navigateTo('dashboardScreen');
-    }
-}
-
-function prevQuestion() {
-    if (currentQuestionIndex > 0) {
-        currentQuestionIndex--;
-        displayQuestion();
-    }
-}        
+        startLiveClock();
     </script>
 </body>
 </html>

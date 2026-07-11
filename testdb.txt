@@ -1,0 +1,120 @@
+mcq_data = [
+    # ==================== CLASS 6 ====================
+    # Physics
+    ('CBSE', 'Class 6', 'Physics', 'Motion and Measurement', 'Which of the following is a standard unit of length?', 'Meter', 'Hand span', 'Footstep', 'Arm length', 'A'),
+    ('ICSE', 'Class 6', 'Physics', 'Force', 'A push or a pull applied on an object is known as:', 'Energy', 'Force', 'Pressure', 'Work', 'B'),
+    # Chemistry
+    ('CBSE', 'Class 6', 'Chemistry', 'Sorting Materials', 'Which of the following materials is completely soluble in water?', 'Chalk powder', 'Sand', 'Sugar', 'Sawdust', 'C'),
+    ('ICSE', 'Class 6', 'Chemistry', 'Matter', 'The space occupied by matter is called its:', 'Mass', 'Density', 'Volume', 'Area', 'C'),
+    # Biology
+    ('CBSE', 'Class 6', 'Biology', 'Getting to Know Plants', 'Which part of the plant anchors it firmly to the soil?', 'Stem', 'Leaves', 'Root', 'Flower', 'C'),
+    ('ICSE', 'Class 6', 'Biology', 'The Leaf', 'The green pigment present in leaves that helps in photosynthesis is:', 'Hemoglobin', 'Chlorophyll', 'Xanthophyll', 'Carotene', 'B'),
+    # Mathematics
+    ('CBSE', 'Class 6', 'Mathematics', 'Basic Geometrical Ideas', 'An angle whose measure is greater than 90 degrees but less than 180 degrees is called:', 'Acute angle', 'Right angle', 'Obtuse angle', 'Straight angle', 'C'),
+    ('ICSE', 'Class 6', 'Mathematics', 'Integers', 'What is the absolute value of -15?', '-15', '15', '0', '1', 'B'),
+    # Computer
+    ('CBSE', 'Class 6', 'Computer', 'Computer Fundamentals', 'Which of the following is the brain of the computer?', 'Monitor', 'Keyboard', 'CPU', 'RAM', 'C'),
+    ('ICSE', 'Class 6', 'Computer', 'Categories of Computers', 'Supercomputers are primarily used for which of the following?', 'Playing games', 'Word processing', 'Weather forecasting', 'Creating spreadsheets', 'C'),
+
+    # ==================== CLASS 7 ====================
+    # Physics
+    ('CBSE', 'Class 7', 'Physics', 'Heat', 'The transfer of heat in liquids and gases primarily takes place through:', 'Conduction', 'Convection', 'Radiation', 'Insulation', 'B'),
+    ('ICSE', 'Class 7', 'Physics', 'Light Energy', 'A plane mirror forms what type of image?', 'Real and inverted', 'Virtual and erect', 'Real and erect', 'Virtual and inverted', 'B'),
+    # Chemistry
+    ('CBSE', 'Class 7', 'Chemistry', 'Acids, Bases and Salts', 'What color does blue litmus paper turn when dipped in an acidic solution?', 'Red', 'Green', 'Yellow', 'Remains blue', 'A'),
+    ('ICSE', 'Class 7', 'Chemistry', 'Elements, Compounds and Mixtures', 'Which of the following represents a chemical compound?', 'Air', 'Water', 'Gold', 'Salt water', 'B'),
+    # Biology
+    ('CBSE', 'Class 7', 'Biology', 'Nutrition in Plants', 'Tiny pores on the surface of leaves through which exchange of gases occurs are called:', 'Stomata', 'Guard cells', 'Vessels', 'Chloroplasts', 'A'),
+    ('ICSE', 'Class 7', 'Biology', 'Kingdom Classification', 'Which group contains unicellular, eukaryotic organisms like Amoeba?', 'Monera', 'Protista', 'Fungi', 'Plantae', 'B'),
+    # Mathematics
+    ('CBSE', 'Class 7', 'Mathematics', 'Algebraic Expressions', 'What is the coefficient of x in the expression 4x - 3y?', '4', '-3', '4x', '1', 'A'),
+    ('ICSE', 'Class 7', 'Mathematics', 'Ratios and Proportions', 'If 3:x = 9:15, what is the value of x?', '5', '4.5', '12', '10', 'A'),
+    # Computer
+    ('CBSE', 'Class 7', 'Computer', 'Computer Viruses', 'Which of the following is a program designed to replicate and damage data?', 'Antivirus', 'Virus', 'Firewall', 'Browser', 'B'),
+    ('ICSE', 'Class 7', 'Computer', 'Number Systems', 'What is the base of the binary number system?', '10', '8', '2', '16', 'C'),
+
+    # ==================== CLASS 8 ====================
+    # Physics
+    ('CBSE', 'Class 8', 'Physics', 'Sound', 'Sound cannot travel through which of the following mediums?', 'Air', 'Water', 'Steel', 'Vacuum', 'D'),
+    ('ICSE', 'Class 8', 'Physics', 'Heat Transfer', 'The SI unit of specific heat capacity is:', 'J/kg°C', 'Joule', 'Calories', 'Watt', 'A'),
+    # Chemistry
+    ('CBSE', 'Class 8', 'Chemistry', 'Coal and Petroleum', 'Which fossil fuel is known as Liquid Gold?', 'Coal', 'Petroleum', 'Natural Gas', 'Kerosene', 'B'),
+    ('ICSE', 'Class 8', 'Chemistry', 'Atomic Structure', 'The atomic number of an element is determined by the number of:', 'Neutrons', 'Protons', 'Electrons + Neutrons', 'Positrons', 'B'),
+    # Biology
+    ('CBSE', 'Class 8', 'Biology', 'Cell Structure', 'Which cell organelle is widely termed the Powerhouse of the Cell?', 'Vacuole', 'Nucleus', 'Mitochondria', 'Ribosome', 'C'),
+    ('ICSE', 'Class 8', 'Biology', 'Ecosystems', 'The biotic components of an ecosystem include:', 'Air and water', 'Soil and minerals', 'Plants and animals', 'Sunlight and temperature', 'C'),
+    # Mathematics
+    ('CBSE', 'Class 8', 'Mathematics', 'Exponents', 'What is the value of 5 to the power of -2?', '-10', '25', '1/25', '-25', 'C'),
+    ('ICSE', 'Class 8', 'Mathematics', 'Factorisation', 'Factorise completely: x² - 9.', '(x-3)(x-3)', '(x+3)(x-3)', '(x+9)(x-9)', 'x(x-9)', 'B'),
+    # Computer
+    ('CBSE', 'Class 8', 'Computer', 'Networking Concepts', 'Which network topology connects all nodes to a central hub?', 'Bus', 'Star', 'Ring', 'Mesh', 'B'),
+    ('ICSE', 'Class 8', 'Computer', 'Operating Systems', 'Which type of OS allows multiple users to access system resources simultaneously?', 'Single-user OS', 'Multi-user OS', 'Real-time OS', 'Distributed OS', 'B'),
+
+    # ==================== CLASS 9 ====================
+    # Physics
+    ('CBSE', 'Class 9', 'Physics', 'Gravitation', 'The value of acceleration due to gravity (g) on the surface of Earth is approximately:', '9.8 m/s²', '8.9 m/s²', '10.8 m/s²', '6.7 m/s²', 'A'),
+    ('ICSE', 'Class 9', 'Physics', 'Laws of Motion', 'The inertia of an object tends to cause the object to:', 'Accelerate', 'Decelerate', 'Resist any change in its state of motion', 'Fall towards Earth', 'C'),
+    # Chemistry
+    ('CBSE', 'Class 9', 'Chemistry', 'Atoms and Molecules', 'What is the chemical formula of Aluminum Sulfate?', 'AlSO4', 'Al2(SO4)3', 'Al3(SO4)2', 'Al(SO4)3', 'B'),
+    ('ICSE', 'Class 9', 'Chemistry', 'Gas Laws', 'According to Boyle\'s Law, pressure is inversely proportional to volume at constant:', 'Mass', 'Temperature', 'Density', 'Humidity', 'B'),
+    # Biology
+    ('CBSE', 'Class 9', 'Biology', 'Tissues', 'Which plant tissue is responsible for the transport of water from roots to leaves?', 'Phloem', 'Parenchyma', 'Xylem', 'Sclerenchyma', 'C'),
+    ('ICSE', 'Class 9', 'Biology', 'Cell and its Structure', 'The process of cell drinking or fluid ingestion by a cell is called:', 'Phagocytosis', 'Pinocytosis', 'Exocytosis', 'Osmosis', 'B'),
+    # Mathematics
+    ('CBSE', 'Class 9', 'Mathematics', 'Polynomials', 'What is the degree of the zero polynomial?', '0', '1', 'Not defined', 'Infinite', 'C'),
+    ('ICSE', 'Class 9', 'Mathematics', 'Coordinate Geometry', 'In which quadrant does the coordinate point (-4, -5) lie?', 'First', 'Second', 'Third', 'Fourth', 'C'),
+    # Computer
+    ('CBSE', 'Class 9', 'Computer', 'Python Basics', 'Which data type in Python is immutable?', 'List', 'Dictionary', 'Set', 'Tuple', 'D'),
+    ('ICSE', 'Class 9', 'Computer', 'Java Intro', 'Which keyword is used to allocate memory for objects in Java?', 'malloc', 'new', 'alloc', 'create', 'B'),
+
+    # ==================== CLASS 10 ====================
+    # Physics
+    ('CBSE', 'Class 10', 'Physics', 'Light Reflection', 'The focal length of a spherical mirror of radius of curvature R is:', 'R', 'R / 2', '2R', '3R', 'B'),
+    ('ICSE', 'Class 10', 'Physics', 'Sound', 'The phenomenon of prolongation of sound due to successive reflections is called:', 'Echo', 'Resonance', 'Reverberation', 'Damping', 'C'),
+    # Chemistry
+    ('CBSE', 'Class 10', 'Chemistry', 'Carbon and its Compounds', 'What is the functional group present in ethanoic acid?', '-OH', '-CHO', '-COOH', '-CO-', 'C'),
+    ('ICSE', 'Class 10', 'Chemistry', 'Periodic Table', 'Moving down a group in the periodic table, the atomic size generally:', 'Decreases', 'Increases', 'Remains constant', 'First decreases then increases', 'B'),
+    # Biology
+    ('CBSE', 'Class 10', 'Biology', 'Life Processes', 'Where does the complete digestion of carbohydrates, proteins, and fats occur?', 'Stomach', 'Large Intestine', 'Small Intestine', 'Liver', 'C'),
+    ('ICSE', 'Class 10', 'Biology', 'Circulatory System', 'Which blood vessel carries deoxygenated blood from the body back to the heart?', 'Aorta', 'Pulmonary Vein', 'Vena Cava', 'Hepatic Artery', 'C'),
+    # Mathematics
+    ('CBSE', 'Class 10', 'Mathematics', 'Trigonometry', 'What is the value of sin²(30°) + cos²(30°)?', '0', '1', '1/2', '2', 'B'),
+    ('ICSE', 'Class 10', 'Mathematics', 'Arithmetic Progression', 'Find the 10th term of the AP: 2, 7, 12, 17...', '45', '47', '52', '50', 'B'),
+    # Computer
+    ('CBSE', 'Class 10', 'Computer', 'Web Technology', 'Which HTML tag is used to create a hyperlink?', '<link>', '<a>', '<href>', '<url>', 'B'),
+    ('ICSE', 'Class 10', 'Computer', 'User Defined Methods', 'A method that has the same name as the class and no return type is called a:', 'Static method', 'Final method', 'Constructor', 'Abstract method', 'C'),
+
+    # ==================== CLASS 11 ====================
+    # Physics
+    ('CBSE', 'Class 11', 'Physics', 'Thermodynamics', 'The first law of thermodynamics is essentially a statement of conservation of:', 'Mass', 'Momentum', 'Energy', 'Entropy', 'C'),
+    ('ICSE', 'Class 11', 'Physics', 'Mechanics', 'The dot product of two mutually perpendicular vectors is always:', '1', '-1', 'Zero', 'Infinite', 'C'),
+    # Chemistry
+    ('CBSE', 'Class 11', 'Chemistry', 'Chemical Bonding', 'Which molecular geometry corresponds to sp3 hybridization with zero lone pairs?', 'Linear', 'Trigonal Planar', 'Tetrahedral', 'Octahedral', 'C'),
+    ('ICSE', 'Class 11', 'Chemistry', 'Thermodynamics', 'For a spontaneous process at constant temperature and pressure, change in Gibbs Free Energy (ΔG) must be:', 'Positive', 'Zero', 'Negative', 'Infinite', 'C'),
+    # Biology
+    ('CBSE', 'Class 11', 'Biology', 'Cell Cycle', 'In which phase of mitosis do the chromosomes align along the equatorial plate?', 'Prophase', 'Metaphase', 'Anaphase', 'Telophase', 'B'),
+    ('ICSE', 'Class 11', 'Biology', 'Plant Physiology', 'The primary acceptor of CO2 in C3 plants during the dark reaction is:', 'PEP', 'RuBP', 'PGA', 'OAA', 'B'),
+    # Mathematics
+    ('CBSE', 'Class 11', 'Mathematics', 'Sets', 'If set A has n elements, how many subsets does it contain?', '2n', 'n²', '2^n', 'n^n', 'C'),
+    ('ICSE', 'Class 11', 'Mathematics', 'Complex Numbers', 'What is the value of i raised to the power of 39?', '1', '-1', 'i', '-i', 'D'),
+    # Computer
+    ('CBSE', 'Class 11', 'Computer', 'Python Sequences', 'Which Python built-in function returns the total length of a list?', 'size()', 'len()', 'count()', 'length()', 'B'),
+    ('ICSE', 'Class 11', 'Computer', 'Java Arrays', 'What is the default initial value of an uninitialized int array element in Java?', '0', 'null', '-1', 'Garbage value', 'A'),
+
+    # ==================== CLASS 12 ====================
+    # Physics
+    ('CBSE', 'Class 12', 'Physics', 'Magnetism', 'The magnetic susceptibility of a diamagnetic material is:', 'Small and positive', 'Large and positive', 'Small and negative', 'Zero', 'C'),
+    ('ICSE', 'Class 12', 'Physics', 'Current Electricity', 'Kirchhoff\'s First Law (Junction Rule) is a reflection of conservation of:', 'Energy', 'Charge', 'Linear momentum', 'Angular momentum', 'B'),
+    # Chemistry
+    ('CBSE', 'Class 12', 'Chemistry', 'Chemical Kinetics', 'If the rate of reaction is independent of the reactant concentration, the reaction order is:', 'Zero order', 'First order', 'Second order', 'Third order', 'A'),
+    ('ICSE', 'Class 12', 'Chemistry', 'Coordination Compounds', 'What is the coordination number of Cobalt in [Co(NH3)6]Cl3?', '3', '4', '6', '9', 'C'),
+    # Biology
+    ('CBSE', 'Class 12', 'Biology', 'Genetics', 'Which of the following is considered a universal stop codon in DNA translation?', 'AUG', 'UAA', 'UUU', 'GUG', 'B'),
+    ('ICSE', 'Class 12', 'Biology', 'Biotechnology', 'Which enzyme acts as molecular scissors to cut DNA at specific sequence sites?', 'DNA Ligase', 'Restriction Endonuclease', 'DNA Polymerase', 'Helicase', 'B'),
+    # Mathematics
+    ('CBSE', 'Class 12', 'Mathematics', 'Matrices', 'If A is a square matrix such that A² = A, then A is called a:', 'Symmetric matrix', 'Idempotent matrix', 'Involutory matrix', 'Nilpotent matrix', 'B'),
+    ('ICSE', 'Class 12', 'Mathematics', 'Calculus', 'Evaluate the definite integral of 1/x from 1 to e:', '0', '1', 'e', 'log(e)', 'B'),
+    # Computer
+    ('CBSE', 'Class 12', 'Computer', 'Database Concepts', 'Which SQL constraint prevents duplicate rows from being saved in a single table column identifier?', 'NOT NULL', 'FOREIGN KEY', 'UNIQUE', 'CHECK', 'C'),
+    ('ICSE', 'Class 12', 'Computer', 'Data Structures', 'Which data structure operates strictly on a Last-In, First-Out (LIFO) algorithmic pipeline?', 'Queue', 'Linked List', 'Stack', 'Binary Tree', 'C')
+]
