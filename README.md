@@ -1,5 +1,6 @@
 **For installation instructions, please scroll down.
-#PaperGen
+
+# PaperGen
 
 A Paper Generator tailored for generating randomized question papers for Indian school students.
 
