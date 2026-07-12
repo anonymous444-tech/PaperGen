@@ -79,6 +79,49 @@ class ExamEngineAPI:
         finally:
             conn.close()
 
+
+    def save_exam_completion(self, name, score, total, correct_indices_list):
+        """Saves the score and flips the dashboard status to Done!"""
+        conn = sqlite3.connect(self.db_name)
+        cursor = conn.cursor()
+        try:
+            # 1. Update dashboard status
+            cursor.execute("UPDATE generated_papers SET status = 'Done!' WHERE name = ?", (name,))
+            
+            # 2. Save pie chart metric data
+            correct_json = json.dumps(correct_indices_list)
+            cursor.execute('''
+                INSERT INTO quiz_results (paper_name, score_achieved, total_questions, correct_questions_json)
+                VALUES (?, ?, ?, ?)
+            ''', (name, score, total, correct_json))
+            
+            conn.commit()
+            return {"status": "success"}
+        except Exception as e:
+            return {"status": "error", "message": str(e)}
+        finally:
+            conn.close()
+
+    def load_historical_results(self):
+        """Used by result_screen.html to fetch the pie chart data"""
+        conn = sqlite3.connect(self.db_name)
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+        try:
+            cursor.execute("SELECT * FROM quiz_results ORDER BY id DESC")
+            rows = cursor.fetchall()
+            return [dict(row) for row in rows]
+        except Exception as e:
+            return []
+        finally:
+            conn.close()
+
+    def open_result_window(self):
+        """Spins up the separate HTML window for results"""
+        html_path = os.path.abspath('result_screen.html')
+        webview.create_window('Exam Results', url=html_path, width=900, height=750)
+        return True
+
 def run_app():
     api = ExamEngineAPI()
     html_path = os.path.abspath('graphics.html')

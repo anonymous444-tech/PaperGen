@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exam Results Analytics</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            padding: 30px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        h2 { text-align: center; color: #2c3e50; }
+        
+        /* Conic Gradient Pie Chart Component Specification */
+        .chart-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+        }
+        .pie-chart {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            /* Defaults to an empty color frame structure state */
+            background: conic-gradient(#e0e0e0 0% 100%); 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .pie-inner {
+            width: 150px;
+            height: 150px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+        .score-big { font-size: 28px; color: #2e7d32; }
+        
+        /* Question List Verification Checkmarks Layout */
+        .q-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .q-node {
+            padding: 12px;
+            text-align: center;
+            background-color: #ffebee;
+            color: #c62828;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+        .q-node.correct {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2 id="paper-title">Loading Latest Results...</h2>
+    
+    <div class="chart-box">
+        <div class="pie-chart" id="resultPie">
+            <div class="pie-inner">
+                <span class="score-big" id="scoreRatio">0/0</span>
+                <span style="color: #7f8c8d; font-size: 12px;">Correct</span>
+            </div>
+        </div>
+    </div>
+
+    <h3>Question Breakdown</h3>
+    <div class="q-grid" id="questionGrid"></div>
+</div>
+
+<script>
+    // Automatically query historical logs down across the engine bridge channel upon DOM creation
+    window.addEventListener('pywebviewready', function() {
+        pywebview.api.load_historical_results().then(function(results) {
+            if (results && results.length > 0) {
+                renderLatestCard(results[0]); // Targets absolute latest record row entry
+            }
+        });
+    });
+
+    function renderLatestCard(data) {
+        document.getElementById('paper-title').innerText = "Result Summary: " + data.paper_name;
+        document.getElementById('scoreRatio').innerText = data.score_achieved + "/" + data.total_questions;
+        
+        // Calculate percentages to map the CSS Conic Gradient layout parameters 
+        let correctPercent = (data.score_achieved / data.total_questions) * 100;
+        let pieElement = document.getElementById('resultPie');
+        
+        // Apply inline styles to render your graphic elements perfectly without relying on internet assets
+        pieElement.style.background = `conic-gradient(#4caf50 0% ${correctPercent}%, #f44336 ${correctPercent}% 100%)`;
+        
+        // Render detailed item rows showing verified checkmarks
+        let correctIndices = JSON.parse(data.correct_questions_json);
+        let gridContainer = document.getElementById('questionGrid');
+        gridContainer.innerHTML = ""; // Flush template
+        
+        for (let i = 1; i <= data.total_questions; i++) {
+            let node = document.createElement('div');
+            node.className = "q-node";
+            
+            if (correctIndices.includes(i)) {
+                node.className += " correct";
+                node.innerText = "Q" + i + " ☑"; // Checkmark mapping matching design specification
+            } else {
+                node.innerText = "Q" + i;
+            }
+            gridContainer.appendChild(node);
+        }
+    }
+</script>
+</body>
+</html>

@@ -55,6 +55,17 @@ def questionbank_db():
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ''', mcq_data)
 
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS quiz_results (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            paper_name TEXT NOT NULL,
+            score_achieved INTEGER NOT NULL,
+            total_questions INTEGER NOT NULL,
+            correct_questions_json TEXT NOT NULL, 
+            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
+
     conn.commit()
     print(f"🚀 SQLite Data Bank Loaded Successfully! Seeded {cursor.rowcount} REAL unique reference rows.")
     conn.close()

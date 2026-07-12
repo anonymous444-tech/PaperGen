@@ -353,6 +353,85 @@
             border-color: #ef4444 !important;
             color: #991b1b !important;
         }
+        /* Bottom Navigation Bar Styles */
+body {
+    padding-bottom: 80px; /* Prevents content from hiding behind the nav bar */
+}
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: var(--surface-color);
+    display: flex;
+    justify-content: space-around;
+    padding: 12px 0;
+    box-shadow: 0 -4px 15px rgba(0,0,0,0.05);
+    border-top: 1px solid var(--border-color);
+    z-index: 1000;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.nav-item.active {
+    color: var(--accent-blue);
+}
+
+/* Internal Result Pie Chart Styles */
+.pie-chart {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: conic-gradient(#e0e0e0 0% 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px auto;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.pie-inner {
+    width: 140px;
+    height: 140px;
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+
+.q-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.q-node {
+    padding: 10px;
+    text-align: center;
+    background-color: #ffebee;
+    color: #c62828;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+.q-node.correct {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
     </style>
 </head>
 <body>
@@ -464,6 +543,42 @@
     <button id="globalAddBtn" class="fab" onclick="navigateTo('formScreen')">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
     </button>
+    <div id="resultScreen" class="screen">
+        <h2 id="paper-title" class="form-heading">Latest Exam Result</h2>
+        
+        <div class="pie-chart" id="resultPie">
+            <div class="pie-inner">
+                <span id="scoreRatio" style="font-size: 28px; color: #2e7d32;">0/0</span>
+                <span style="color: #7f8c8d; font-size: 12px;">Correct</span>
+            </div>
+        </div>
+
+        <h3 style="text-align: center; margin-top: 20px;">Question Breakdown</h3>
+        <div class="q-grid" id="questionGrid"></div>
+        <div id="emptyResultState" class="empty-state" style="display:none;">No exams completed yet!</div>
+    </div>
+
+    <div id="aboutScreen" class="screen">
+        <h2 class="form-heading">About PaperGen</h2>
+        <div style="text-align: center; color: var(--text-muted); line-height: 1.6; margin-top: 20px;">
+            <p><strong>Version:</strong> V1.0 Beta</p>
+            <p>Built as an offline-first desktop test paper generation engine to combat exam anxiety in low-connectivity areas.</p>
+            <p>Made in Python, pywebview, and SQLite3.</p>
+            <p>GNU GPL v3.0 License</p>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item active" id="nav-dashboard" onclick="navigateTo('dashboardScreen', this)">
+            <span>Test Papers</span>
+        </div>
+        <div class="nav-item" id="nav-result" onclick="loadAndNavigateToResults(this)">
+            <span>Result</span>
+        </div>
+        <div class="nav-item" id="nav-about" onclick="navigateTo('aboutScreen', this)">
+            <span>About</span>
+        </div>
+    </div>
 
     <script>
         const chapterDatabase = {
@@ -561,31 +676,37 @@
                     const paperBoard = paper.board || "N/A";
                     const paperClass = paper.class_name || paper.className || "N/A";
                     const paperSubject = paper.subject || "Subject";
+                    
+
+                    const currentStatus = paper.status || "Pending";
+                    const statusColor = currentStatus === "Done!" ? "var(--success)" : "var(--pending)";
 
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                         <td>
-                            <div class="file-cell">
-                                <div class="file-icon">
-                                    <span class="icon-text" style="color: var(--accent-blue); font-size: 0.75rem;">
-                                        ${paperSubject.substring(0, 3).toUpperCase()}
-                                    </span>
-                                </div>
-                                <div>
-                                    <div class="file-name">${paperName}</div>
-                                    <div class="file-subtitle">Board: ${paperBoard} • Class: ${paperClass} • Subject: ${paperSubject}</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="mode-text online">Local</span></td>
-                        <td><span class="status-badge">Pending</span></td>
-                        <td class="actions-cell">
-                            <button class="action-btn" onclick="initializeQuiz('${paperSubject}', '${paperBoard}', '${paperClass}', '${paperName}')" style="cursor:pointer; opacity:1;">
-                                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                                </svg>
-                            </button>
-                        </td>
+                    <div class="file-cell">
+                        <div class="file-icon">
+                            <span class="icon-text" style="color: var(--accent-blue); font-size: 0.75rem;">
+                                ${paperSubject.substring(0, 3).toUpperCase()}
+                            </span>
+                        </div>
+                        <div>
+                            <div class="file-name">${paperName}</div>
+                            <div class="file-subtitle">Board: ${paperBoard} • Class: ${paperClass} • Subject: ${paperSubject}</div>
+                        </div>
+                    </div>
+                </td>
+                <td><span class="mode-text online">Local</span></td>
+                
+                <td><span class="status-badge" style="color: ${statusColor};">${currentStatus}</span></td>
+                
+                <td class="actions-cell">
+                    <button class="action-btn" onclick="initializeQuiz('${paperSubject}', '${paperBoard}', '${paperClass}', '${paperName}')" style="cursor:pointer; opacity:1;">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                        </svg>
+                    </button>
+                </td>
                     `;
                     tableBody.appendChild(tr);
                 });
@@ -720,6 +841,8 @@
             }
         }
 
+
+
         function prevQuestion() {
             if (currentQuestionIndex > 0) {
                 currentQuestionIndex--;
@@ -734,6 +857,103 @@
             document.getElementById('classSelect').selectedIndex = 0;
             activeSelectedChapters = [];
             document.getElementById('selectedChaptersCount').innerText = "";
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < quizQuestions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                // 1. Calculate final metrics
+                let score = 0;
+                let correctIndices = [];
+                
+                quizQuestions.forEach((q, index) => {
+                    let userPick = userAnswers[index];
+                    if (userPick === q.correct) {
+                        score++;
+                        correctIndices.push(index + 1); // 1-based index for Question numbering
+                    }
+                });
+
+                let paperName = document.getElementById('quizTitle').innerText;
+
+                // 2. Send metrics across the pywebview bridge
+                pywebview.api.save_exam_completion(paperName, score, quizQuestions.length, correctIndices)
+                    .then(res => {
+                        if (res.status === 'success') {
+                            // 3. Refresh the local dashboard to show "Done!" and open the chart window
+                            loadDashboardFromDB();
+                            const resultTab = document.getElementById('nav-result');
+
+                            navigateTo('dashboardScreen');
+                        } else {
+                            alert("Error saving results: " + res.message);
+                        }
+                    });
+            }
+        }
+
+
+        function navigateTo(screenId, navElement = null) {
+            // Hide all screens
+            document.querySelectorAll('.screen').forEach(scr => scr.classList.remove('active'));
+            // Show target screen
+            document.getElementById(screenId).classList.add('active');
+            
+            // Handle FAB visibility
+            const fab = document.getElementById('globalAddBtn');
+            if (screenId === 'dashboardScreen') {
+                fab.style.display = 'flex';
+            } else {
+                fab.style.display = 'none';
+            }
+
+            // Update Bottom Nav active state
+            if (navElement) {
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                navElement.classList.add('active');
+            }
+        }
+
+        // Dedicated function for the Result Tab to load the Pie Chart dynamically
+        function loadAndNavigateToResults(navElement) {
+            navigateTo('resultScreen', navElement);
+            
+            pywebview.api.load_historical_results().then(function(results) {
+                if (results && results.length > 0) {
+                    document.getElementById('emptyResultState').style.display = 'none';
+                    document.getElementById('resultPie').style.display = 'flex';
+                    
+                    let data = results[0]; // Grab the absolute latest result
+                    document.getElementById('paper-title').innerText = data.paper_name;
+                    document.getElementById('scoreRatio').innerText = data.score_achieved + "/" + data.total_questions;
+                    
+                    let correctPercent = (data.score_achieved / data.total_questions) * 100;
+                    let pieElement = document.getElementById('resultPie');
+                    pieElement.style.background = `conic-gradient(#4caf50 0% ${correctPercent}%, #f44336 ${correctPercent}% 100%)`;
+                    
+                    let correctIndices = JSON.parse(data.correct_questions_json);
+                    let gridContainer = document.getElementById('questionGrid');
+                    gridContainer.innerHTML = ""; 
+                    
+                    for (let i = 1; i <= data.total_questions; i++) {
+                        let node = document.createElement('div');
+                        node.className = "q-node";
+                        if (correctIndices.includes(i)) {
+                            node.className += " correct";
+                            node.innerText = "Q" + i + " ☑"; 
+                        } else {
+                            node.innerText = "Q" + i;
+                        }
+                        gridContainer.appendChild(node);
+                    }
+                } else {
+                    document.getElementById('emptyResultState').style.display = 'block';
+                    document.getElementById('resultPie').style.display = 'none';
+                    document.getElementById('questionGrid').innerHTML = "";
+                }
+            });
         }
 
         function startLiveClock() {
