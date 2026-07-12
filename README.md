@@ -37,11 +37,21 @@ With PaperGen, students can create a bunch of new test papers to practice their 
 * Desktop Bridge Architecture: pywebview (for rendering native GUI app windows without massive frameworks like Electron)
 
 * Frontend Interface: Vanilla HTML5, CSS3, and JavaScript (Zero external network calls)
-# Installation Guide
 
--Install pywebview:
+# Installation Guide
+-Install python3 using terminal in Linux
+```sudo apt install python3```(debian) or the python installer in Windows
+
+-Install pywebview using cmd in Windows and terminal in Linux:
 
 ```pip install pywebview```
+
+-Install everything present in the repo as a zip
+
+-Extract the folder in a location
+
+-open cmd in Windows or terminal in Linux and run the following command
+```cd PaperGen-main/PaperGen-main/```
 
 - Run main.py
 
